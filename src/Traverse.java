@@ -30,8 +30,8 @@ public class Traverse {
     frank.getConfidants().addAll(Arrays.asList(bob, grace));
     grace.getConfidants().add(henry);
     henry.getConfidants().addAll(Arrays.asList(alice, diana));
-    irene.getConfidants().addAll(Arrays.asList(jack, diana));
-    jack.getConfidants().addAll(Arrays.asList(charlie, bob));
+    irene.getConfidants().addAll(Arrays.asList(jack));
+    jack.getConfidants().addAll(Arrays.asList(henry));
 
 
     Map<Integer, Set<Integer>> graph = new HashMap<>();
@@ -69,5 +69,48 @@ public class Traverse {
     v45.neighbors = new ArrayList<>(List.of(v23));
     v23.neighbors = new ArrayList<>(List.of());
     v67.neighbors = new ArrayList<>(List.of(v91));
+    System.out.println(reachable(graph, 3, 45));
+
   }
+
+  public static boolean reachable(Map<Integer, Set<Integer>> graph, int start, int end){
+    Set<Integer> visited = new HashSet<>();
+    return reachable(graph, start, end, visited);
+
+
+
+  }
+  public static boolean reachable(Map<Integer, Set<Integer>> graph, int start, int end, Set<Integer> visited){
+    if(start == end) return true;
+    if(visited.contains(start) || graph == null || graph.containsKey(start) || graph.get(start)== null) return false;
+    visited.add(start);
+
+    for(int neighbor : graph.get(start)){
+     if( reachable(graph, neighbor, end, visited)) return true;
+    }
+
+    return false;
+
+  }
+
+  
+
+  public static void printGossiper(Person person){
+    Set<Person> visited = new HashSet<>();
+    printGossiper(person, visited);
+  }
+    public static void printGossiper(Person person, Set<Person> visited){
+      if(person == null || visited.contains(person)) return;
+      visited.add(person);
+      System.out.println(person.getName());
+
+      for(Person confidant : person.getConfidants()){
+        printGossiper(confidant, visited);
+
+      }
+
+
+    }
+
+  
 }
